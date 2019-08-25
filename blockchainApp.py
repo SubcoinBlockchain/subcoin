@@ -32,7 +32,7 @@ def new_block():
 	block_data["timestamp"] = str(date.datetime.now())
 	block_data["nonce"] = 0
 	try:
-		block_data["previous_hash"] = blockchain.blocks[len(blockchain.blocks)-1].hash
+		block_data["previous_hash"] = blockchain.last_block].hash
 	except(IndexError):
 		return "Coding error", 500
 	block_data["index"] = len(blockchain.blocks)
@@ -55,7 +55,7 @@ def get_chain():
 
 @app.route('/last_block', methods=['GET'])
 def last_block():
-	return (blockchain.blocks[len(blockchain.blocks)-1].json).replace("'",'"')
+	return (blockchain.last_block.json).replace("'",'"')
 
 @app.route('/new_user', methods=['POST'])
 def new_user():
@@ -76,5 +76,12 @@ def new_user():
 	blockchain.append(new_block)
 	
 	return "Success", 201
+
+@app.route('/get_user', methods=['GET'])
+def get_user():
+	user = request.args.get('username')
+	block = blockchain.lastblock.json
+	return "Not yet implemented", 418
+	
 
 app.run(debug=True, port=8000)
