@@ -82,6 +82,39 @@ def new_user():
 	
 	return "Success", 201
 
+@app.route('/new_userHTML', methods=['POST'])
+def new_userHTML():
+	block_data = {}
+	try:
+		form_data = json.dumps(request.form)
+		block_data = json.loads(form_data)
+	except():
+		return "Error", 500
+	if(block_data == None):
+		return "JSON not recieved", 404
+	if(type(block_data) == str):
+		return "JSON not parsed", 418
+	required_fields = ["name","owner","orientation", "identifies_as"]
+	for field in required_fields:
+		if not block_data.get(field):
+			return "Invalid block data" + '\n' + json.dumps(block_data), 404
+	current_block = blockchain.last_block
+	blockD = main.buildBlockUser(block_data, current_block)
+	new_block = main.Block(blockD, current_block, globalDiff)
+	blockchain.append(new_block)
+	
+	return "Success", 201
+
+"""
+HTML interaction
+"""
+
+@app.route('/registeruser', methods=['GET'])
+def registerUser():
+	htmlF = open('registerUser.html', 'r')
+	html = htmlF.read()
+	return str(html), 200
+
 """
 Data retrieval
 """

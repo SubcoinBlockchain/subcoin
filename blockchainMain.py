@@ -71,8 +71,6 @@ def next_block(last_block):
 
 def buildBlockJson(data, last_block):
 	jsonD = {}
-	#tmp = json.loads(data)
-	#data = tmp
 	oldJsonD = json.loads(last_block.json)
 	jsonD["index"] = int(last_block.index)+1
 	jsonD["timestamp"] = date.datetime.now()
@@ -85,4 +83,16 @@ def buildBlockJson(data, last_block):
 	jsonD["nonce"] = 0
 	return jsonD
 	
-	
+def buildBlockUser(user, last_block):
+	jsonD = {}
+	oldJsonD = json.loads(last_block.json)
+	jsonD["index"] = int(last_block.index)+1
+	jsonD["timestamp"] = date.datetime.now()
+	OJD = json.dumps(oldJsonD["data"])
+	jsonD["data"] = json.loads(OJD)
+	JData = jsonD["data"]
+	Jusers = JData["users"]
+	Jusers.append(user)
+	jsonD["previous_hash"] = last_block.hash
+	jsonD["nonce"] = 0
+	return jsonD
