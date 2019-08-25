@@ -77,11 +77,10 @@ def new_user():
 	
 	return "Success", 201
 
-@app.route('/get_user', methods=['GET'])
-def get_user():
-	user = request.args.get('username')
+@app.route('/users/<username>', methods=['GET'])
+def get_user(username):
 	block = blockchain.last_block.json
-	return "Not yet implemented "+ str(user) , 418
+	return "Not yet implemented " + str(username), 418
 	
 
 app.run(debug=True, port=8000)
