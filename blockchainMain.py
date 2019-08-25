@@ -13,9 +13,7 @@ class BlockChain:
 	def __init__(self):
 		with open('genesis.json','r') as json_file:
 			block_genesis = json.load(json_file)
-		print(str(block_genesis).replace("'",'"'))
 		genBlock = Block(block_genesis, None)
-		print(str(genBlock.json).replace("'",'"'))
 		self.blocks.append(genBlock)
 	def append(self, block):
 		assert isinstance(block, Block), "Must pass a Block instance"

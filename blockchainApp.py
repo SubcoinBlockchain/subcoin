@@ -79,8 +79,12 @@ def new_user():
 
 @app.route('/users/<username>', methods=['GET'])
 def get_user(username):
-	block = blockchain.last_block.json
-	return "Not yet implemented " + str(username), 418
+	blockData = json.loads(blockchain.last_block.json)["data"]
+	for user in blockData["users"]:
+		if(user.get("name").lower() == username):
+			return user, 201
+		else:
+			return "Not found", 404
 	
 
 app.run(debug=True, port=8000)
