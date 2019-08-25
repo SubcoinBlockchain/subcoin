@@ -26,7 +26,7 @@ class BlockChain:
 class Block:
 	difficulty = 1
 	nonce = 0
-	def __init__(self, jsonD, last_block):
+	def __init__(self, jsonD, last_block, difficulty=1):
 		self.nonce = jsonD["nonce"]
 		self.index = str(jsonD["index"]).encode()
 		self.timestamp = str(jsonD["timestamp"]).encode()
@@ -45,7 +45,7 @@ class Block:
 		sha = hashlib.sha256()
 		sha.update( (str(self.index) + str(self.timestamp) + str(self.data) + str(self.previous_hash)).encode("utf-8") + str(self.nonce).encode() )
 		
-		while not sha.hexdigest().startswith('0'):
+		while not sha.hexdigest().startswith('0'*self.difficulty):
 			self.nonce += 1
 			sha.update( (str(self.index) + str(self.timestamp) + str(self.data) + str(self.previous_hash)).encode("utf-8") + str(self.nonce).encode() )
 		return sha.hexdigest()

@@ -5,13 +5,30 @@ from flask import Flask, request
 import requests
 import json
 import datetime as date
+
+"""
+Global Variables
+"""
+globalDiff = 1
+app =  Flask(__name__)
+blockchain = main.BlockChain()
+"""
+Administrative interactions
+"""
+@app.route('/adminset_difficulty', methods=['GET'])
+def adminset_difficulty():
+	try:
+		difficulty = int(request.args.get('diff'))
+	except(TypeError):
+		return "NaN", 400
+	except():
+		return "?", 401
+	globalDiff = difficulty
+	return "", 201
+
 """
 Networking and interaction
 """
-
-app =  Flask(__name__)
-
-blockchain = main.BlockChain()
 
 @app.route('/new_block', methods=['POST'])
 def new_block():
@@ -37,7 +54,7 @@ def new_block():
 		return "Coding error", 500
 	block_data["index"] = len(blockchain.blocks)
 	try:
-		new_block = main.Block(block_data,blockchain.last_block)
+		new_block = main.Block(block_data,blockchain.last_block, globalDiff)
 		blockchain.append(new_block)
 	except(errors.InvalidBlock):
 		return "Block Invalid", 404
@@ -60,7 +77,7 @@ def new_user():
 			return "Invalid block data", 404
 	current_block = blockchain.last_block
 	blockD = main.buildBlockJson(block_data, current_block)
-	new_block = main.Block(blockD, current_block)
+	new_block = main.Block(blockD, current_block, globalDiff)
 	blockchain.append(new_block)
 	
 	return "Success", 201
@@ -90,6 +107,7 @@ def get_user(username):
 			return user, 201
 		else:
 			return "Not found", 404
+
 @app.route('/users', methods=['GET'])
 def users():
 	blockData = json.loads(blockchain.last_block.json)["data"]["users"]
