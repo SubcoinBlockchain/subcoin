@@ -13,7 +13,9 @@ class BlockChain:
 	def __init__(self):
 		with open('genesis.json','r') as json_file:
 			block_genesis = json.load(json_file)
-		genBlock = Block(block_genesis, '0')
+		print(str(block_genesis).replace("'",'"'))
+		genBlock = Block(block_genesis, None)
+		print(str(genBlock.json).replace("'",'"'))
 		self.blocks.append(genBlock)
 	def append(self, block):
 		assert isinstance(block, Block), "Must pass a Block instance"
@@ -26,12 +28,12 @@ class BlockChain:
 class Block:
 	difficulty = 1
 	nonce = 0
-	def __init__(self, json, last_block):
-		self.nonce = json["nonce"]
-		self.index = str(json["index"]).encode()
-		self.timestamp = str(json["timestamp"]).encode()
-		self.data = str(json["data"]).encode()
-		self.previous_hash = str(json["previous_hash"]).encode()
+	def __init__(self, jsonD, last_block):
+		self.nonce = jsonD["nonce"]
+		self.index = str(jsonD["index"]).encode()
+		self.timestamp = str(jsonD["timestamp"]).encode()
+		self.data = jsonD["data"]
+		self.previous_hash = str(jsonD["previous_hash"]).encode()
 		self.hash = self.hash_block()
 		if(int(self.index) != 0):
 			try:
@@ -57,7 +59,7 @@ class Block:
 		jsonD["index"] = str(self.index.decode())
 		jsonD["nonce"] = str(self.nonce)
 		jsonD["timestamp"] = str(self.timestamp.decode())
-		jsonD["data"] = str(self.data.decode())
+		jsonD["data"] = self.data
 		return (json.dumps(jsonD))
 
 def next_block(last_block):

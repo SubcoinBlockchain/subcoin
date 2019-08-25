@@ -55,7 +55,7 @@ def get_chain():
 
 @app.route('/last_block', methods=['GET'])
 def last_block():
-	return (blockchain.last_block.json).replace("'",'"')
+	return (blockchain.last_block.json).replace("'",'"').encode()
 
 @app.route('/new_user', methods=['POST'])
 def new_user():
