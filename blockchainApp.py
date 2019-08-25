@@ -45,18 +45,6 @@ def new_block():
 		return "Unknown Error", 404
 	return "Success", 201
 
-@app.route('/chain', methods=['GET'])
-def get_chain():
-    chain_data = []
-    for block in blockchain.blocks:
-        chain_data.append(block.json)
-    return json.dumps({"length": len(chain_data),
-                       "chain": chain_data})
-
-@app.route('/last_block', methods=['GET'])
-def last_block():
-	return (blockchain.last_block.json).replace("'",'"').encode()
-
 @app.route('/new_user', methods=['POST'])
 def new_user():
 	block_data = {}
@@ -77,8 +65,25 @@ def new_user():
 	
 	return "Success", 201
 
+"""
+Data retrieval
+"""
+@app.route('/last_block', methods=['GET'])
+def last_block():
+	return (blockchain.last_block.json).replace("'",'"').encode()
+
+@app.route('/chain', methods=['GET'])
+def get_chain():
+    chain_data = []
+    for block in blockchain.blocks:
+        chain_data.append(block.json)
+    return json.dumps({"length": len(chain_data),
+                       "chain": chain_data})
+
 @app.route('/users/<username>', methods=['GET'])
 def get_user(username):
+	if(len(username) > 100):
+		return "", 444
 	blockData = json.loads(blockchain.last_block.json)["data"]
 	for user in blockData["users"]:
 		if(user.get("name").lower() == username):
