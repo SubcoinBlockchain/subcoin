@@ -76,7 +76,7 @@ def buildBlockJson(data, last_block):
 	oldJsonD = json.loads(last_block.json)
 	jsonD["index"] = int(last_block.index)+1
 	jsonD["timestamp"] = date.datetime.now()
-	OJD = oldJsonD["data"].replace("'",'"')
+	OJD = json.dumps(oldJsonD["data"])
 	jsonD["data"] = json.loads(OJD)
 	JData = jsonD["data"]
 	Jusers = JData["users"]

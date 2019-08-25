@@ -85,6 +85,10 @@ def get_user(username):
 			return user, 201
 		else:
 			return "Not found", 404
+@app.route('/users', methods=['GET'])
+def users():
+	blockData = json.loads(blockchain.last_block.json)["data"]["users"]
+	return json.dumps(blockData), 200
 	
 
 app.run(debug=True, port=8000)
