@@ -58,6 +58,7 @@ class Block:
 		jsonD["nonce"] = str(self.nonce)
 		jsonD["timestamp"] = str(self.timestamp.decode())
 		jsonD["data"] = self.data
+		jsonD["hash"] = self.hash
 		return (json.dumps(jsonD))
 
 def next_block(last_block):

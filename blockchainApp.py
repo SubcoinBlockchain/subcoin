@@ -131,8 +131,16 @@ def get_chain():
     chain_data = []
     for block in blockchain.blocks:
         chain_data.append(block.json)
-    return json.dumps({"length": len(chain_data),
-                       "chain": chain_data})
+    return str(chain_data)
+
+@app.route('/chain/<BHash>', methods=['GET'])
+def chainHash(BHash):
+	for block in blockchain.blocks:
+		blockD = json.loads(block.json)
+		if(blockD["hash"] == BHash):
+			return block.json
+		else:
+			return "Not found", 404
 
 @app.route('/users/<username>', methods=['GET'])
 def get_user(username):
