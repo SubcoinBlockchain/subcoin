@@ -110,7 +110,7 @@ def new_userHTML():
 """
 HTML interaction
 """
-
+@app.route('/index')
 @app.route('/', methods=['GET'])
 def index():
 	return html.parseHtml("index"), 200
@@ -139,15 +139,16 @@ def get_user(username):
 	if(len(username) > 100):
 		return "", 444
 	blockData = json.loads(blockchain.last_block.json)["data"]
+	users = []
 	for user in blockData["users"]:
+		users.append(user)
 		if(user.get("name").lower() == username.lower()):
 			if(user["owner"] != "NA" and user["owner"] != "None" and user["owner"] != None ):
 				OData = user["owner"]
 			else:
 				OData = "None"
-			return render_template('users-user.html', username=user["name"], gender=user["identifies_as"], orientation=user["orientation"], owner=OData ), 201
-		else:
-			return "Not found", 404
+			return render_template('users-user.html', username=user["name"], gender=user["identifies_as"], orientation=user["orientation"], owner=OData ), 200
+	return "Not found", 404
 
 @app.route('/users', methods=['GET'])
 def users():

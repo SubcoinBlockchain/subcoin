@@ -6,7 +6,7 @@
 	</head>
 	<body>
 		{% for user in users %}
-			<a href="{{ url_for('get_user',username=user) }}">{{ user }}</a>
+			<a href="{{ url_for('get_user',username=user) }}">{{ user }}</a><br>
 		{% endfor %}
 	</body>
 </html>
