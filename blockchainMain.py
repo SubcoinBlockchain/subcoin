@@ -28,36 +28,20 @@ class BlockChain:
 						NBlock = Block(block, None)
 					else:
 						NBlock = Block(block, self.last_block)
-					self.append(NBlock, False)
+					self.append(NBlock)
 	
-	def append(self, block, write=True):
+	def append(self, block):
 		assert isinstance(block, Block), "Must pass a Block instance"
 		self.blocks.append(block)
-		print(write)
-		if(write == False):
-			return
 		chainJD = {}
 		chainJD["blocks"] = []
-		print("----------------------" + str(chainJD["blocks"]) + "--------------")
-		try:
-			with open('blockchain.json', 'r') as jsonF:
-				oldData = json.load(jsonF)
-				jsonF.close()
-				chainJD["blocks"] = oldData["blocks"]
-		except:
-			print('')
-		finally:
-			blockchainF = open('blockchain.json', 'w')
-			print("----------------------" + str(chainJD["blocks"]) + "--------------")
-			for block in self.blocks:
-				print(block)
-				dataJs = json.loads(block.json)
-				chainJD["blocks"].append(dataJs)
-				print("----------------------" + str(chainJD["blocks"]) + "--------------")
-			JsonData = json.dumps(chainJD)
-			#print("----------------------" + str(JsonData) + "--------------")
-			blockchainF.write(JsonData)
-			blockchainF.close()
+		for block in self.blocks:
+			print(block.json)
+			chainJD["blocks"].append(json.loads(block.json))
+		blockchainF = open('blockchain.json', 'w')
+		JsonData = json.dumps(chainJD)
+		blockchainF.write(JsonData)
+		blockchainF.close()
 	
 	@property
 	def last_block(self):
