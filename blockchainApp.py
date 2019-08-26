@@ -128,10 +128,11 @@ def last_block():
 
 @app.route('/chain', methods=['GET'])
 def get_chain():
-    chain_data = []
-    for block in blockchain.blocks:
-        chain_data.append(block.json)
-    return str(chain_data)
+	hash_chain = []
+	for block in blockchain.blocks:
+		block = json.loads(block.json)
+		hash_chain.append(block["hash"])
+	return render_template('chain.html', chain=hash_chain)
 
 @app.route('/chain/<BHash>', methods=['GET'])
 def chainHash(BHash):
