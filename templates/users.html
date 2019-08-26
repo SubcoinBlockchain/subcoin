@@ -2,9 +2,11 @@
 <html lang="en-US">
 	<head>
 		<meta charset="utf-8">
-
+		<p style="font-size:85%"><a href="{{ url_for('index') }}" >Home</a></p>
 	</head>
 	<body>
+		<h2>Welcome to the user list</h2>
+		<p>Here you can see every registered user in this blockchain! If you want to learn more about someone, click their name!</p>
 		{% for user in users %}
 			<a href="{{ url_for('get_user',username=user) }}">{{ user }}</a><br>
 		{% endfor %}
