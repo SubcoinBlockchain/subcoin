@@ -140,7 +140,7 @@ def get_user(username):
 		return "", 444
 	blockData = json.loads(blockchain.last_block.json)["data"]
 	for user in blockData["users"]:
-		if(user.get("name").lower() == username):
+		if(user.get("name").lower() == username.lower()):
 			if(user["owner"] != "NA" and user["owner"] != "None" and user["owner"] != None ):
 				OData = user["owner"]
 			else:
@@ -152,7 +152,10 @@ def get_user(username):
 @app.route('/users', methods=['GET'])
 def users():
 	blockData = json.loads(blockchain.last_block.json)["data"]["users"]
-	return json.dumps(blockData), 200
+	userlist = []
+	for user in blockData:
+		userlist.append(str(user["name"]))
+	return render_template('users.html', users=userlist), 200
 	
 
 app.run(debug=True, port=8000)
