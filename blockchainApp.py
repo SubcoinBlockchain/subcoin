@@ -139,7 +139,7 @@ def chainHash(BHash):
 	for block in blockchain.blocks:
 		blockD = json.loads(block.json)
 		if(blockD["hash"] == BHash):
-			return block.json
+			return render_template('chain-block.html', block=blockD)
 		else:
 			return "Not found", 404
 
