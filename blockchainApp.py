@@ -2,7 +2,7 @@ import blockchainMain as main
 import blockchainErrors as errors
 import blockchainVerify as verify
 import blockchainHtml as html
-from flask import Flask, request
+from flask import Flask, request, render_template
 import requests
 import json
 import datetime as date
@@ -141,7 +141,11 @@ def get_user(username):
 	blockData = json.loads(blockchain.last_block.json)["data"]
 	for user in blockData["users"]:
 		if(user.get("name").lower() == username):
-			return user, 201
+			if(user["owner"] != "NA" and user["owner"] != "None" and user["owner"] != None ):
+				OData = user["owner"]
+			else:
+				OData = "None"
+			return render_template('users-user.html', username=user["name"], gender=user["identifies_as"], orientation=user["orientation"], owner=OData ), 201
 		else:
 			return "Not found", 404
 
