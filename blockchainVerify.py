@@ -7,7 +7,6 @@ def validateChanges(new_block, current_block):
 		return False
 	return True
 	
-	return True
 def validateUser(username, current_block):
 	data = json.loads(current_block.json)["data"]["users"]
 	for user in data:
