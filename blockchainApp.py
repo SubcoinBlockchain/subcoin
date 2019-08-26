@@ -1,10 +1,12 @@
 import blockchainMain as main
 import blockchainErrors as errors
 import blockchainVerify as verify
+import blockchainHtml as html
 from flask import Flask, request
 import requests
 import json
 import datetime as date
+
 
 """
 Global Variables
@@ -109,11 +111,13 @@ def new_userHTML():
 HTML interaction
 """
 
+@app.route('/', methods=['GET'])
+def index():
+	return html.parseHtml("index"), 200
+
 @app.route('/registeruser', methods=['GET'])
 def registerUser():
-	htmlF = open('registerUser.html', 'r')
-	html = htmlF.read()
-	return str(html), 200
+	return html.parseHtml("registerUser"), 200
 
 """
 Data retrieval
