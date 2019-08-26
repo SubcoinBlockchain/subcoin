@@ -10,14 +10,54 @@ Defining basic blockchain
 
 class BlockChain:
 	blocks = []
-	def __init__(self):
-		with open('genesis.json','r') as json_file:
-			block_genesis = json.load(json_file)
-		genBlock = Block(block_genesis, None)
-		self.blocks.append(genBlock)
-	def append(self, block):
+	def __init__(self, blockchainFile = None):
+		if(blockchainFile == None):
+			with open('genesis.json','r') as json_file:
+				block_genesis = json.load(json_file)
+			genBlock = Block(block_genesis, None)
+			self.append(genBlock)
+			return
+		else:
+			print("Loading chain")
+			genesis = True
+			with open(blockchainFile, 'r') as chainJson:
+				blockchainD = json.load(chainJson)
+				for block in blockchainD["blocks"]:
+					if genesis == True:
+						print(block)
+						NBlock = Block(block, None)
+					else:
+						NBlock = Block(block, self.last_block)
+					self.append(NBlock, False)
+	
+	def append(self, block, write=True):
 		assert isinstance(block, Block), "Must pass a Block instance"
 		self.blocks.append(block)
+		print(write)
+		if(write == False):
+			return
+		chainJD = {}
+		chainJD["blocks"] = []
+		print("----------------------" + str(chainJD["blocks"]) + "--------------")
+		try:
+			with open('blockchain.json', 'r') as jsonF:
+				oldData = json.load(jsonF)
+				jsonF.close()
+				chainJD["blocks"] = oldData["blocks"]
+		except:
+			print('')
+		finally:
+			blockchainF = open('blockchain.json', 'w')
+			print("----------------------" + str(chainJD["blocks"]) + "--------------")
+			for block in self.blocks:
+				print(block)
+				dataJs = json.loads(block.json)
+				chainJD["blocks"].append(dataJs)
+				print("----------------------" + str(chainJD["blocks"]) + "--------------")
+			JsonData = json.dumps(chainJD)
+			#print("----------------------" + str(JsonData) + "--------------")
+			blockchainF.write(JsonData)
+			blockchainF.close()
 	
 	@property
 	def last_block(self):
@@ -27,8 +67,8 @@ class Block:
 	difficulty = 1
 	nonce = 0
 	def __init__(self, jsonD, last_block, difficulty=1):
-		self.nonce = jsonD["nonce"]
-		self.index = str(jsonD["index"]).encode()
+		self.nonce = int(jsonD["nonce"])
+		self.index = int(str(jsonD["index"]).encode())
 		self.timestamp = str(jsonD["timestamp"]).encode()
 		self.data = jsonD["data"]
 		self.previous_hash = str(jsonD["previous_hash"]).encode()
@@ -40,7 +80,7 @@ class Block:
 					raise errors.InvalidBlock
 			except(IndexError):
 				raise errors.CodeError
-
+		
 	def hash_block(self):
 		sha = hashlib.sha512()
 		sha.update( (str(self.index) + str(self.timestamp) + str(self.data) + str(self.previous_hash)).encode("utf-8") + str(self.nonce).encode() )
@@ -54,7 +94,7 @@ class Block:
 	def json(self):
 		jsonD = {}
 		jsonD["previous_hash"] = str(self.previous_hash.decode())
-		jsonD["index"] = str(self.index.decode())
+		jsonD["index"] = str(self.index)
 		jsonD["nonce"] = str(self.nonce)
 		jsonD["timestamp"] = str(self.timestamp.decode())
 		jsonD["data"] = self.data

@@ -6,14 +6,15 @@ from flask import Flask, request, render_template
 import requests
 import json
 import datetime as date
-
+import traceback
 
 """
 Global Variables
 """
 globalDiff = 1
 app =  Flask(__name__)
-blockchain = main.BlockChain()
+blockchain = main.BlockChain('blockchain.json')
+#blockchain = main.BlockChain()
 """
 Administrative interactions
 """
@@ -141,8 +142,8 @@ def chainHash(BHash):
 		blockD = json.loads(block.json)
 		if(blockD["hash"] == BHash):
 			return render_template('chain-block.html', block=blockD)
-		else:
-			return "Not found", 404
+		
+	return "Not found", 404
 
 @app.route('/users/<username>', methods=['GET'])
 def get_user(username):
@@ -168,5 +169,7 @@ def users():
 		userlist.append(str(user["name"]))
 	return render_template('users.html', users=userlist), 200
 	
-
-app.run(debug=True, port=8000)
+try:
+	app.run(debug=True, port=8000)
+except(KeyboardInterrupt):
+	exit()
