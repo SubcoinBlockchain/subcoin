@@ -42,7 +42,7 @@ class Block:
 				raise errors.CodeError
 
 	def hash_block(self):
-		sha = hashlib.sha256()
+		sha = hashlib.sha512()
 		sha.update( (str(self.index) + str(self.timestamp) + str(self.data) + str(self.previous_hash)).encode("utf-8") + str(self.nonce).encode() )
 		
 		while not sha.hexdigest().startswith('0'*self.difficulty):
