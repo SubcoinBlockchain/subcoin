@@ -1,7 +1,6 @@
 import blockchainMain as main
 import blockchainErrors as errors
 import blockchainVerify as verify
-import blockchainHtml as html
 from flask import Flask, request, render_template
 import requests
 import json
@@ -119,11 +118,11 @@ HTML interaction
 @app.route('/index')
 @app.route('/', methods=['GET'])
 def index():
-	return html.parseHtml("index"), 200
+	return render_template("index.html"), 200
 
 @app.route('/registeruser', methods=['GET'])
 def registerUser():
-	return html.parseHtml("registerUser"), 200
+	return render_template("registerUser.html"), 200
 
 """
 Data retrieval
