@@ -124,7 +124,8 @@ Data retrieval
 """
 @app.route('/last_block', methods=['GET'])
 def last_block():
-	return (blockchain.last_block.json).replace("'",'"').encode()
+	blockD = json.loads(blockchain.last_block.json)
+	return render_template('chain-block.html', block=blockD)
 
 @app.route('/chain', methods=['GET'])
 def get_chain():
