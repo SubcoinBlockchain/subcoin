@@ -70,6 +70,7 @@ class Block:
 		if(sha.hexdigest().startswith('0'*self.difficulty)):
 			valid = True
 		while not valid:
+			sha = hashlib.sha512()
 			self.nonce += 1
 			sha.update( (str(self.index) + str(self.timestamp) + str(self.data) + str(self.previous_hash)).encode("utf-8") + str(self.nonce).encode() )
 			if(sha.hexdigest().startswith('0'*self.difficulty)):
