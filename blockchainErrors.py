@@ -9,3 +9,5 @@ class InvalidChange(BlockchainError):
 	pass
 class CodeError(BlockchainError):
 	pass
+class UserExists(BlockchainError):
+	pass

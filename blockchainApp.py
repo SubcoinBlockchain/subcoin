@@ -88,6 +88,7 @@ def new_user():
 @app.route('/new_userHTML', methods=['POST'])
 def new_userHTML():
 	block_data = {}
+	current_block = blockchain.last_block
 	try:
 		form_data = json.dumps(request.form)
 		block_data = json.loads(form_data)
@@ -97,11 +98,15 @@ def new_userHTML():
 		return "JSON not recieved", 404
 	if(type(block_data) == str):
 		return "JSON not parsed", 418
+	try:
+		if(verify.validateUser(block_data, current_block) == False):
+			raise errors.UserExists
+	except(errors.UserExists):
+		return "User already exists", 400
 	required_fields = ["name","owner","orientation", "identifies_as"]
 	for field in required_fields:
 		if not block_data.get(field):
 			return "Invalid block data" + '\n' + json.dumps(block_data), 404
-	current_block = blockchain.last_block
 	blockD = main.buildBlockUser(block_data, current_block)
 	new_block = main.Block(blockD, current_block, globalDiff)
 	blockchain.append(new_block)
