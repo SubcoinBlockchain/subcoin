@@ -18,7 +18,6 @@ class BlockChain:
 			self.append(genBlock)
 			return
 		else:
-			print("Loading chain")
 			genesis = True
 			with open(blockchainFile, 'r') as chainJson:
 				blockchainD = json.load(chainJson)
@@ -26,6 +25,7 @@ class BlockChain:
 					if genesis == True:
 						print(block)
 						NBlock = Block(block, None)
+						genesis = False
 					else:
 						NBlock = Block(block, self.last_block)
 					self.append(NBlock)
@@ -36,7 +36,6 @@ class BlockChain:
 		chainJD = {}
 		chainJD["blocks"] = []
 		for block in self.blocks:
-			print(block.json)
 			chainJD["blocks"].append(json.loads(block.json))
 		blockchainF = open('blockchain.json', 'w')
 		JsonData = json.dumps(chainJD)

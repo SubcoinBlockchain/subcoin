@@ -6,7 +6,7 @@
 	</head>
 	<body>
 		{% for hash in chain %}
-			<a href="{{ url_for('chainHash',BHash=hash) }}">{{ chain }}</a><br>
+			<a href="{{ url_for('chainHash',BHash=hash) }}">{{ hash }}</a><br>
 		{% endfor %}
 	</body>
 </html>
