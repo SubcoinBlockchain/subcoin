@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en-US">
+	<head>
+		<meta charset="utf-8">
+		<p style="font-size:85%"><a href="{{ url_for('index') }}" >Home</a></p>
+	</head>
+	<body>
+		{% if error == UserExists %}
+			<p>User {{ user_name }} already exists. View the existing entry <a href="{{ url_for('get_user', username=user_name) }}">here</a></p>
+			<p>If this is you and you did not make this entry please contact the administrator.</p>
+		{% else %}
+			<p>An error occured, this is most likely due to an error in the blockchain code. Please contact the administrator with this error code: {{ Herror }}.</p>
+		{% endif %}
+	</body>
+</html>

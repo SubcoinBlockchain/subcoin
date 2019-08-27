@@ -94,23 +94,20 @@ def new_userHTML():
 	except():
 		return "Error", 500
 	if(block_data == None):
-		return "JSON not recieved", 404
+		return render_template("userFail.html", Herror="JSON not recieved"), 404
 	if(type(block_data) == str):
-		return "JSON not parsed", 418
-	try:
-		if(verify.validateUser(block_data, current_block) == False):
-			raise errors.UserExists
-	except(errors.UserExists):
-		return "User already exists", 400
+		return render_template("userFail.html", Herror="JSON not parsed"), 500
+	if(verify.validateUser(block_data, current_block) == False):
+		return render_template("userFail.html", Herror = 'UserExists', user_name=block_data.get("name")), 400
 	required_fields = ["name","owner","orientation", "identifies_as"]
 	for field in required_fields:
 		if not block_data.get(field):
-			return "Invalid block data" + '\n' + json.dumps(block_data), 404
+			print("Invalid block data" + '\n' + json.dumps(block_data), 404)
+			return render_template("userFail.html", error='Invalid block data')
 	blockD = main.buildBlockUser(block_data, current_block)
 	new_block = main.Block(blockD, current_block, globalDiff)
 	blockchain.append(new_block)
-	
-	return "Success", 201
+	return render_template("userSuccess.html", user_name=block_data.get("name")), 200
 
 """
 HTML interaction
