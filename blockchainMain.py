@@ -1,6 +1,5 @@
 import hashlib, json
 import datetime as date
-from flask import Flask, request
 import requests
 import blockchainErrors as errors
 

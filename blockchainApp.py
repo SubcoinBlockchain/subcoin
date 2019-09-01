@@ -45,7 +45,7 @@ def new_block():
 	
 	for field in required_fields:
 		if not block_data.get(field):
-			return "Invalid block data", 404
+			return "Invalid block data", 400
 	if(verify.validateChanges(block_data,blockchain.last_block) != True):
 	   raise InvalidChange
 	block_data["timestamp"] = str(date.datetime.now())
@@ -121,6 +121,14 @@ def index():
 def registerUser():
 	return render_template("registerUser.html"), 200
 
+@app.route('/users/edit/<username>', methods=['GET','POST'])
+def edit_user(username):
+	block = json.loads(blockchain.last_block.json)
+	for user in block["data"]["users"]:
+		if(user["name"].lower() == username.lower()):
+			return user["name"], 418
+	return "User not found", 404
+	return "TO BE DEVELOPED", 418
 """
 Data retrieval
 """
