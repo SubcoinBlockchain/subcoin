@@ -29,6 +29,11 @@ def adminset_difficulty():
 	return "", 201
 
 """
+CSS
+"""
+#@app.route('/css/main.css', methods=['GET'])
+
+"""
 Networking and interaction
 """
 
@@ -128,7 +133,7 @@ def edit_user(username):
 		if(user["name"].lower() == username.lower()):
 			return user["name"], 418
 	return "User not found", 404
-	return "TO BE DEVELOPED", 418
+
 """
 Data retrieval
 """
